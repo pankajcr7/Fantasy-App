@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import SplashScreen from './components/SplashScreen';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -17,11 +19,10 @@ import Toast from './components/Toast';
 
 export default function App() {
   const { user, loading, toast } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
 
-  if (loading) return (
-    <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-      <div className="spinner" style={{ width: 40, height: 40 }} />
-    </div>
+  if (showSplash || loading) return (
+    <SplashScreen onFinish={() => setShowSplash(false)} />
   );
 
   return (

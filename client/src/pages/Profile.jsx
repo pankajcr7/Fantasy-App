@@ -20,7 +20,7 @@ export default function Profile() {
     { icon: FileText, title: 'Points System', desc: 'Cricket scoring breakdown', color: '#06d6a0', bg: 'rgba(6,214,160,0.12)', action: () => {} },
     { icon: Shield, title: 'Responsible Play', desc: 'Play responsibly & set limits', color: '#118ab2', bg: 'rgba(17,138,178,0.12)', action: () => {} },
     { icon: MessageCircle, title: 'Help & Support', desc: '24/7 customer support', color: '#ffd166', bg: 'rgba(255,209,102,0.12)', action: () => {} },
-    { icon: HelpCircle, title: 'About Local Dream', desc: 'Terms, privacy & legality', color: '#a0a0c0', bg: 'rgba(160,160,192,0.12)', action: () => {} },
+    { icon: HelpCircle, title: 'About Brutal Local Fantasy', desc: 'Terms, privacy & legality', color: '#a0a0c0', bg: 'rgba(160,160,192,0.12)', action: () => {} },
   ];
 
   return (
@@ -78,7 +78,7 @@ export default function Profile() {
       </div>
 
       <div style={{ textAlign: 'center', padding: '16px', fontSize: 11, color: 'var(--text3)' }}>
-        Local Dream v1.0.0 | Made with &#10084;&#65039; in India
+        Brutal Local Fantasy v1.0.0 | Made with &#10084;&#65039; in India
       </div>
     </div>
   );

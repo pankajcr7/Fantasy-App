@@ -7,9 +7,9 @@ export default function Landing() {
   return (
     <div className="landing-page">
       <div className="landing-hero">
-        <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" className="landing-logo" />
+        <img src={import.meta.env.BASE_URL + "logo.png"} alt="Brutal Local Fantasy" className="landing-logo" />
         <h1 className="landing-title">
-          Play <span className="highlight">Fantasy Cricket</span> & Win Big!
+          Play <span className="highlight">Brutal</span> Fantasy Cricket!
         </h1>
         <p className="landing-desc">
           Create your dream team, join exciting contests, and compete with millions of cricket fans across India.
@@ -56,7 +56,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <div className="section-title">Why Local Dream?</div>
+      <div className="section-title">Why Brutal Local Fantasy?</div>
       <div className="landing-features">
         <div className="feature-card">
           <div className="feature-icon" style={{ background: 'rgba(230,57,70,0.12)' }}>
@@ -92,7 +92,7 @@ export default function Landing() {
           Start Playing Now
         </button>
         <p style={{ fontSize: 11, color: 'var(--text3)', marginTop: 12 }}>
-          Join 10 Lakh+ fantasy cricket players on Local Dream
+          Join 10 Lakh+ fantasy cricket players on Brutal Local Fantasy
         </p>
       </div>
     </div>

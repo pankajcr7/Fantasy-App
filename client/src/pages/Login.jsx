@@ -28,9 +28,9 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" className="auth-logo" />
+      <img src={import.meta.env.BASE_URL + "logo.png"} alt="Brutal Local Fantasy" className="auth-logo" />
       <h1 className="auth-title">Welcome Back!</h1>
-      <p className="auth-subtitle">Login to your Local Dream account</p>
+      <p className="auth-subtitle">Login to your Brutal Local Fantasy account</p>
       <form className="auth-form" onSubmit={handleSubmit}>
         {error && <div className="auth-error">{error}</div>}
         <div className="input-group">

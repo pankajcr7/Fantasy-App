@@ -31,8 +31,8 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" className="auth-logo" />
-      <h1 className="auth-title">Join Local Dream</h1>
+      <img src={import.meta.env.BASE_URL + "logo.png"} alt="Brutal Local Fantasy" className="auth-logo" />
+      <h1 className="auth-title">Join Brutal Local Fantasy</h1>
       <p className="auth-subtitle">Create your account & get &#8377;500 bonus!</p>
       <form className="auth-form" onSubmit={handleSubmit}>
         {error && <div className="auth-error">{error}</div>}
