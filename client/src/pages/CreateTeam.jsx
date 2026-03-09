@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
-import { Check } from 'lucide-react';
+import { Check, Eye } from 'lucide-react';
+import TeamPreviewModal from '../components/TeamPreviewModal';
 
 export default function CreateTeam() {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function CreateTeam() {
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [teamFilter, setTeamFilter] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getMatch(id), api.getMatchPlayers(id)])
@@ -157,16 +159,36 @@ export default function CreateTeam() {
         );
       })}
 
-      <div className="floating-btn" style={{ bottom: 16 }}>
+      <div className="floating-btn" style={{ bottom: 16, display: 'flex', gap: 10 }}>
+        {selected.length > 0 && (
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '14px 16px', fontSize: 14, borderRadius: 14, flexShrink: 0 }}
+            onClick={() => setShowPreview(true)}
+          >
+            <Eye size={16} /> Preview
+          </button>
+        )}
         <button
           className={`btn btn-full ${selected.length === 11 ? 'btn-green' : 'btn-secondary'}`}
-          style={{ padding: '14px', fontSize: 15, borderRadius: 14 }}
+          style={{ padding: '14px', fontSize: 15, borderRadius: 14, flex: 1 }}
           onClick={handleNext}
           disabled={selected.length !== 11}
         >
-          Next: Choose Captain & Vice Captain ({selected.length}/11)
+          Next ({selected.length}/11)
         </button>
       </div>
+
+      {showPreview && (
+        <TeamPreviewModal
+          players={players}
+          selected={selected}
+          captain={null}
+          viceCaptain={null}
+          match={match}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   );
 }

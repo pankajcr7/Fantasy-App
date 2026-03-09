@@ -2,13 +2,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import Header from '../components/Header';
-import { Plus } from 'lucide-react';
+import { Plus, Eye } from 'lucide-react';
+import TeamPreviewModal from '../components/TeamPreviewModal';
 
 export default function MyTeams() {
   const [teams, setTeams] = useState([]);
   const [matches, setMatches] = useState([]);
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [previewTeam, setPreviewTeam] = useState(null);
+  const [previewMatch, setPreviewMatch] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,7 +75,16 @@ export default function MyTeams() {
                   <div key={team.id} className="team-preview">
                     <div className="team-preview-header">
                       <span className="team-preview-name">{team.name}</span>
-                      {team.points > 0 && <span className="team-preview-points">{team.points} pts</span>}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {team.points > 0 && <span className="team-preview-points">{team.points} pts</span>}
+                        <button
+                          className="btn btn-sm btn-secondary"
+                          style={{ padding: '5px 10px', fontSize: 11, gap: 4 }}
+                          onClick={() => { setPreviewTeam(team); setPreviewMatch(match); }}
+                        >
+                          <Eye size={13} /> Preview
+                        </button>
+                      </div>
                     </div>
                     <div className="team-preview-composition">
                       {Object.entries(roles).map(([role, count]) => (
@@ -100,6 +112,17 @@ export default function MyTeams() {
             </div>
           );
         })
+      )}
+
+      {previewTeam && (
+        <TeamPreviewModal
+          players={players}
+          selected={previewTeam.players}
+          captain={previewTeam.captain}
+          viceCaptain={previewTeam.viceCaptain}
+          match={previewMatch}
+          onClose={() => { setPreviewTeam(null); setPreviewMatch(null); }}
+        />
       )}
     </div>
   );
