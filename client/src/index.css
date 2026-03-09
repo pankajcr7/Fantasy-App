@@ -1558,3 +1558,336 @@ a { text-decoration: none; color: inherit; }
   border-color: var(--primary);
   color: white;
 }
+
+/* ===== Dream11-style Team Preview on Cricket Ground ===== */
+
+.tp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.tp-container {
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.tp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
+  position: relative;
+}
+
+.tp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-team-split {
+  display: flex;
+  gap: 6px;
+}
+
+.tp-team-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tp-team-badge strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.tp-team1 {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.tp-team2 {
+  background: rgba(0,0,0,0.3);
+  color: #ccc;
+}
+
+.tp-credits-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.tp-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+
+.tp-close:hover { background: rgba(255,255,255,0.2); }
+
+/* Cricket Ground */
+.tp-field {
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 50%, #2d8a4e 0%, #1e6f3a 40%, #155c2e 70%, #0d4420 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0 20px;
+  min-height: 0;
+}
+
+.tp-field::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 70%;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.tp-field::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 55%;
+  height: 45%;
+  border: 1.5px solid rgba(255,255,255,0.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.tp-boundary {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  height: 88%;
+  border: 2px solid rgba(255,255,255,0.07);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Cricket Pitch in center */
+.tp-pitch {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 100px;
+  background: #c4a96a;
+  border-radius: 3px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tp-pitch-inner {
+  position: absolute;
+  inset: 4px 3px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.tp-pitch-crease {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+}
+
+.tp-crease-top { top: 18px; }
+.tp-crease-bot { bottom: 18px; }
+
+/* Role Rows */
+.tp-role-row {
+  position: relative;
+  z-index: 2;
+  padding: 6px 0;
+}
+
+.tp-role-label {
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+
+.tp-row-wk .tp-role-label { color: rgba(255,220,100,0.7); }
+.tp-row-bat .tp-role-label { color: rgba(255,220,100,0.7); }
+.tp-row-ar .tp-role-label { color: rgba(255,220,100,0.7); }
+.tp-row-bowl .tp-role-label { color: rgba(255,220,100,0.7); }
+
+.tp-players-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 8px;
+}
+
+/* Each Player */
+.tp-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 72px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tp-player-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+  position: relative;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: linear-gradient(180deg, #3a8a5c 0%, #1d5c35 100%);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+}
+
+.tp-player-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tp-img-team1 {
+  border-color: rgba(100,180,255,0.5);
+  background: linear-gradient(180deg, #2a5f8f 0%, #1a3d5c 100%);
+}
+
+.tp-img-team2 {
+  border-color: rgba(255,255,255,0.3);
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+}
+
+/* Player Name Badge */
+.tp-player-name {
+  margin-top: 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-align: center;
+  max-width: 72px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+}
+
+.tp-name-team1 {
+  background: #1a6fc4;
+  color: #fff;
+}
+
+.tp-name-team2 {
+  background: #444;
+  color: #fff;
+}
+
+.tp-player-credits {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  margin-top: 1px;
+  letter-spacing: 0.3px;
+}
+
+/* Captain / Vice Captain Badge */
+.tp-cv-badge {
+  position: absolute;
+  top: -2px;
+  left: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border: 1.5px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.tp-cap {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.tp-vc {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+  .tp-player { width: 62px; }
+  .tp-player-img { width: 44px; height: 44px; }
+  .tp-player-name { font-size: 8.5px; max-width: 62px; }
+  .tp-players-row { gap: 2px; }
+}
+
+@media (min-width: 400px) {
+  .tp-player { width: 78px; }
+  .tp-player-img { width: 56px; height: 56px; }
+  .tp-player-name { font-size: 10px; max-width: 78px; }
+}
