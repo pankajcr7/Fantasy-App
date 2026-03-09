@@ -1,0 +1,105 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../api';
+import Header from '../components/Header';
+import { Plus } from 'lucide-react';
+
+export default function MyTeams() {
+  const [teams, setTeams] = useState([]);
+  const [matches, setMatches] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    Promise.all([api.getMyTeams(), api.getMatches(), api.getMatchPlayers('m1').catch(() => [])])
+      .then(async ([t, m]) => {
+        setTeams(t);
+        setMatches(m);
+        const allPlayerIds = [...new Set(t.flatMap(team => team.players))];
+        try {
+          const res = await fetch('/api/players');
+          const allP = await res.json();
+          setPlayers(allP);
+        } catch {}
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const getMatch = (matchId) => matches.find(m => m.id === matchId);
+
+  const groupedByMatch = {};
+  teams.forEach(t => {
+    if (!groupedByMatch[t.matchId]) groupedByMatch[t.matchId] = [];
+    groupedByMatch[t.matchId].push(t);
+  });
+
+  return (
+    <div className="page page-with-header">
+      <Header title="My Teams" showWallet />
+
+      {loading ? (
+        <div className="loading-spinner"><div className="spinner" /></div>
+      ) : teams.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-state-icon">&#127951;</div>
+          <div className="empty-state-title">No teams created</div>
+          <div className="empty-state-text">Create your first fantasy cricket team</div>
+          <button className="btn btn-primary" style={{ margin: '16px auto 0' }} onClick={() => navigate('/home')}>
+            Browse Matches
+          </button>
+        </div>
+      ) : (
+        Object.entries(groupedByMatch).map(([matchId, matchTeams]) => {
+          const match = getMatch(matchId);
+          return (
+            <div key={matchId}>
+              <div className="section-title" style={{ paddingBottom: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  {match && <><span>{match.team1Flag}</span> {match.team1} vs {match.team2} <span>{match.team2Flag}</span></>}
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text3)' }}>{match?.format}</span>
+              </div>
+              {matchTeams.map(team => {
+                const teamPlayers = players.filter(p => team.players.includes(p.id));
+                const roles = { WK: 0, BAT: 0, AR: 0, BOWL: 0 };
+                teamPlayers.forEach(p => roles[p.role]++);
+                const captain = players.find(p => p.id === team.captain);
+                const vc = players.find(p => p.id === team.viceCaptain);
+
+                return (
+                  <div key={team.id} className="team-preview">
+                    <div className="team-preview-header">
+                      <span className="team-preview-name">{team.name}</span>
+                      {team.points > 0 && <span className="team-preview-points">{team.points} pts</span>}
+                    </div>
+                    <div className="team-preview-composition">
+                      {Object.entries(roles).map(([role, count]) => (
+                        <div key={role} className="composition-item">
+                          <div className="role">{role}</div>
+                          <div className="num">{count}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="team-preview-players">
+                      {teamPlayers.map(p => (
+                        <div
+                          key={p.id}
+                          className={`mini-player ${p.id === team.captain ? 'captain' : ''} ${p.id === team.viceCaptain ? 'vice-captain' : ''}`}
+                        >
+                          {p.id === team.captain && <span className="badge c">C</span>}
+                          {p.id === team.viceCaptain && <span className="badge vc">VC</span>}
+                          {p.name.split(' ').pop()}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}
