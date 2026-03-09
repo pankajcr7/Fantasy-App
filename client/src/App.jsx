@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import SplashScreen from './components/SplashScreen';
 import Landing from './pages/Landing';
@@ -16,14 +16,28 @@ import Wallet from './pages/Wallet';
 import Leaderboard from './pages/Leaderboard';
 import BottomNav from './components/BottomNav';
 import Toast from './components/Toast';
+import AdminLogin from './admin/AdminLogin';
+import AdminLayout from './admin/AdminLayout';
+import './admin/admin.css';
 
 export default function App() {
   const { user, loading, toast } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
 
-  if (showSplash || loading) return (
+  if (!isAdmin && (showSplash || loading)) return (
     <SplashScreen onFinish={() => setShowSplash(false)} />
   );
+
+  if (isAdmin) {
+    return (
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/*" element={<AdminLayout />} />
+      </Routes>
+    );
+  }
 
   return (
     <div className="app-container">

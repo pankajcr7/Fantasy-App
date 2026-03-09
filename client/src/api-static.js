@@ -190,4 +190,223 @@ export const api = {
     setStore('users', users);
     return { balance: user.balance };
   },
+
+  getPlayers: async () => playersData,
+
+  adminLogin: async (email, password) => {
+    const ADMIN_EMAIL = 'thakurpankaj726@gmail.com';
+    const ADMIN_PASS = 'react@js7';
+    if (email !== ADMIN_EMAIL || password !== ADMIN_PASS) return { error: 'Invalid admin credentials' };
+    const token = btoa(JSON.stringify({ id: 'admin', role: 'admin', email, exp: Date.now() + 7 * 86400000 }));
+    localStorage.setItem(STORAGE_PREFIX + 'admin_token', token);
+    return { token, admin: { email, role: 'admin' } };
+  },
+
+  adminMe: async () => {
+    const token = localStorage.getItem(STORAGE_PREFIX + 'admin_token');
+    if (!token) return { error: 'No token' };
+    try {
+      const payload = JSON.parse(atob(token));
+      if (payload.exp < Date.now() || payload.role !== 'admin') return { error: 'Invalid' };
+      return { email: payload.email, role: 'admin' };
+    } catch { return { error: 'Invalid token' }; }
+  },
+
+  adminLogout: () => {
+    localStorage.removeItem(STORAGE_PREFIX + 'admin_token');
+  },
+
+  adminGetStats: async () => {
+    const users = getStore('users');
+    const teams = getStore('userTeams');
+    const joined = getStore('joinedContests');
+    const contests = getStore('contests');
+    const totalPrizePool = contests.reduce((s, c) => s + (c.prizePool || 0), 0);
+    const totalRevenue = joined.reduce((s, j) => {
+      const c = contests.find(ct => ct.id === j.contestId);
+      return s + (c ? c.entryFee : 0);
+    }, 0);
+    return {
+      totalUsers: users.length,
+      totalTeams: teams.length,
+      totalMatches: matchesData.length,
+      totalContests: contests.length,
+      totalJoined: joined.length,
+      totalPrizePool,
+      totalRevenue,
+      recentUsers: users.slice(-5).reverse(),
+    };
+  },
+
+  adminGetUsers: async () => {
+    const users = getStore('users');
+    const teams = getStore('userTeams');
+    const joined = getStore('joinedContests');
+    return users.map(u => ({
+      id: u.id, name: u.name, email: u.email, mobile: u.mobile || '',
+      balance: u.balance, avatar: u.avatar, joined: u.joined,
+      teamsCount: teams.filter(t => t.userId === u.id).length,
+      contestsJoined: joined.filter(j => j.userId === u.id).length,
+    }));
+  },
+
+  adminDeleteUser: async (userId) => {
+    let users = getStore('users');
+    users = users.filter(u => u.id !== userId);
+    setStore('users', users);
+    let teams = getStore('userTeams');
+    teams = teams.filter(t => t.userId !== userId);
+    setStore('userTeams', teams);
+    let joined = getStore('joinedContests');
+    joined = joined.filter(j => j.userId !== userId);
+    setStore('joinedContests', joined);
+    return { success: true };
+  },
+
+  adminUpdateUserBalance: async (userId, amount) => {
+    const users = getStore('users');
+    const user = users.find(u => u.id === userId);
+    if (!user) return { error: 'Not found' };
+    user.balance = amount;
+    setStore('users', users);
+    return { success: true, balance: user.balance };
+  },
+
+  adminGetAllMatches: async () => {
+    const dynamicMatches = getStore('matches');
+    const all = [...matchesData, ...dynamicMatches];
+    const seen = new Set();
+    return all.filter(m => { if (seen.has(m.id)) return false; seen.add(m.id); return true; });
+  },
+
+  adminAddMatch: async (match) => {
+    const dynamicMatches = getStore('matches');
+    const newMatch = { ...match, id: 'm' + Date.now() };
+    dynamicMatches.push(newMatch);
+    setStore('matches', dynamicMatches);
+    matchesData.push(newMatch);
+    return newMatch;
+  },
+
+  adminUpdateMatch: async (id, data) => {
+    let found = false;
+    for (let i = 0; i < matchesData.length; i++) {
+      if (matchesData[i].id === id) { Object.assign(matchesData[i], data); found = true; break; }
+    }
+    const dynamicMatches = getStore('matches');
+    for (let i = 0; i < dynamicMatches.length; i++) {
+      if (dynamicMatches[i].id === id) { Object.assign(dynamicMatches[i], data); found = true; break; }
+    }
+    if (!found) {
+      const merged = { ...matchesData.find(m => m.id === id), ...data };
+      dynamicMatches.push(merged);
+    }
+    setStore('matches', dynamicMatches);
+    return { success: true };
+  },
+
+  adminDeleteMatch: async (id) => {
+    const idx = matchesData.findIndex(m => m.id === id);
+    if (idx !== -1) matchesData.splice(idx, 1);
+    let dynamicMatches = getStore('matches');
+    dynamicMatches = dynamicMatches.filter(m => m.id !== id);
+    setStore('matches', dynamicMatches);
+    let contests = getStore('contests');
+    contests = contests.filter(c => c.matchId !== id);
+    setStore('contests', contests);
+    return { success: true };
+  },
+
+  adminGetAllPlayers: async () => {
+    const dynamicPlayers = getStore('players');
+    const all = [...playersData, ...dynamicPlayers];
+    const seen = new Set();
+    return all.filter(p => { if (seen.has(p.id)) return false; seen.add(p.id); return true; });
+  },
+
+  adminAddPlayer: async (player) => {
+    const dynamicPlayers = getStore('players');
+    const newPlayer = { ...player, id: 'p' + Date.now(), credits: Number(player.credits) || 8 };
+    dynamicPlayers.push(newPlayer);
+    setStore('players', dynamicPlayers);
+    playersData.push(newPlayer);
+    return newPlayer;
+  },
+
+  adminUpdatePlayer: async (id, data) => {
+    if (data.credits) data.credits = Number(data.credits);
+    for (let i = 0; i < playersData.length; i++) {
+      if (playersData[i].id === id) { Object.assign(playersData[i], data); break; }
+    }
+    const dynamicPlayers = getStore('players');
+    let found = false;
+    for (let i = 0; i < dynamicPlayers.length; i++) {
+      if (dynamicPlayers[i].id === id) { Object.assign(dynamicPlayers[i], data); found = true; break; }
+    }
+    if (!found) dynamicPlayers.push({ ...playersData.find(p => p.id === id), ...data });
+    setStore('players', dynamicPlayers);
+    return { success: true };
+  },
+
+  adminDeletePlayer: async (id) => {
+    const idx = playersData.findIndex(p => p.id === id);
+    if (idx !== -1) playersData.splice(idx, 1);
+    let dynamicPlayers = getStore('players');
+    dynamicPlayers = dynamicPlayers.filter(p => p.id !== id);
+    setStore('players', dynamicPlayers);
+    return { success: true };
+  },
+
+  adminGetAllContests: async () => {
+    const contests = getStore('contests');
+    return contests.map(c => {
+      const match = matchesData.find(m => m.id === c.matchId);
+      return { ...c, matchLabel: match ? `${match.team1} vs ${match.team2}` : c.matchId };
+    });
+  },
+
+  adminAddContest: async (contest) => {
+    const contests = getStore('contests');
+    const newContest = {
+      ...contest, id: 'c' + Date.now(),
+      entryFee: Number(contest.entryFee), totalSpots: Number(contest.totalSpots),
+      filledSpots: 0, prizePool: Number(contest.prizePool), firstPrize: Number(contest.firstPrize),
+    };
+    contests.push(newContest);
+    setStore('contests', contests);
+    return newContest;
+  },
+
+  adminUpdateContest: async (id, data) => {
+    const contests = getStore('contests');
+    const contest = contests.find(c => c.id === id);
+    if (!contest) return { error: 'Not found' };
+    if (data.entryFee) data.entryFee = Number(data.entryFee);
+    if (data.totalSpots) data.totalSpots = Number(data.totalSpots);
+    if (data.prizePool) data.prizePool = Number(data.prizePool);
+    if (data.firstPrize) data.firstPrize = Number(data.firstPrize);
+    Object.assign(contest, data);
+    setStore('contests', contests);
+    return { success: true };
+  },
+
+  adminDeleteContest: async (id) => {
+    let contests = getStore('contests');
+    contests = contests.filter(c => c.id !== id);
+    setStore('contests', contests);
+    let joined = getStore('joinedContests');
+    joined = joined.filter(j => j.contestId !== id);
+    setStore('joinedContests', joined);
+    return { success: true };
+  },
+
+  adminGetAllTeams: async () => {
+    const teams = getStore('userTeams');
+    const users = getStore('users');
+    return teams.map(t => {
+      const user = users.find(u => u.id === t.userId);
+      const match = matchesData.find(m => m.id === t.matchId);
+      return { ...t, userName: user ? user.name : 'Unknown', matchLabel: match ? `${match.team1} vs ${match.team2}` : t.matchId };
+    });
+  },
 };
