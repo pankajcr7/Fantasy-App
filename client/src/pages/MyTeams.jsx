@@ -12,16 +12,17 @@ export default function MyTeams() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Promise.all([api.getMyTeams(), api.getMatches(), api.getMatchPlayers('m1').catch(() => [])])
+    Promise.all([api.getMyTeams(), api.getMatches()])
       .then(async ([t, m]) => {
         setTeams(t);
         setMatches(m);
-        const allPlayerIds = [...new Set(t.flatMap(team => team.players))];
-        try {
-          const res = await fetch('/api/players');
-          const allP = await res.json();
-          setPlayers(allP);
-        } catch {}
+        const matchIds = [...new Set(t.map(team => team.matchId))];
+        const allPlayers = [];
+        for (const mid of matchIds) {
+          const mp = await api.getMatchPlayers(mid);
+          mp.forEach(p => { if (!allPlayers.find(x => x.id === p.id)) allPlayers.push(p); });
+        }
+        setPlayers(allPlayers);
       })
       .finally(() => setLoading(false));
   }, []);

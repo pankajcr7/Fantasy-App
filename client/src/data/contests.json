@@ -1,0 +1,167 @@
+[
+  {
+    "id": "c1",
+    "matchId": "m1",
+    "name": "Mega Contest",
+    "entryFee": 49,
+    "totalSpots": 10000,
+    "filledSpots": 7823,
+    "prizePool": 400000,
+    "firstPrize": 100000,
+    "type": "mega"
+  },
+  {
+    "id": "c2",
+    "matchId": "m1",
+    "name": "Head to Head",
+    "entryFee": 25,
+    "totalSpots": 2,
+    "filledSpots": 1,
+    "prizePool": 45,
+    "firstPrize": 45,
+    "type": "h2h"
+  },
+  {
+    "id": "c3",
+    "matchId": "m1",
+    "name": "Winner Takes All",
+    "entryFee": 99,
+    "totalSpots": 100,
+    "filledSpots": 67,
+    "prizePool": 9000,
+    "firstPrize": 9000,
+    "type": "winner"
+  },
+  {
+    "id": "c4",
+    "matchId": "m1",
+    "name": "Small League",
+    "entryFee": 10,
+    "totalSpots": 20,
+    "filledSpots": 14,
+    "prizePool": 180,
+    "firstPrize": 90,
+    "type": "small"
+  },
+  {
+    "id": "c5",
+    "matchId": "m2",
+    "name": "Mega Contest",
+    "entryFee": 49,
+    "totalSpots": 5000,
+    "filledSpots": 3215,
+    "prizePool": 200000,
+    "firstPrize": 50000,
+    "type": "mega"
+  },
+  {
+    "id": "c6",
+    "matchId": "m2",
+    "name": "Head to Head",
+    "entryFee": 50,
+    "totalSpots": 2,
+    "filledSpots": 0,
+    "prizePool": 90,
+    "firstPrize": 90,
+    "type": "h2h"
+  },
+  {
+    "id": "c7",
+    "matchId": "m2",
+    "name": "Practice Contest",
+    "entryFee": 0,
+    "totalSpots": 1000,
+    "filledSpots": 456,
+    "prizePool": 0,
+    "firstPrize": 0,
+    "type": "practice"
+  },
+  {
+    "id": "c8",
+    "matchId": "m3",
+    "name": "Mega Contest",
+    "entryFee": 29,
+    "totalSpots": 8000,
+    "filledSpots": 5100,
+    "prizePool": 180000,
+    "firstPrize": 45000,
+    "type": "mega"
+  },
+  {
+    "id": "c9",
+    "matchId": "m3",
+    "name": "Mini League",
+    "entryFee": 15,
+    "totalSpots": 50,
+    "filledSpots": 32,
+    "prizePool": 675,
+    "firstPrize": 300,
+    "type": "small"
+  },
+  {
+    "id": "c10",
+    "matchId": "m4",
+    "name": "Mega Contest",
+    "entryFee": 39,
+    "totalSpots": 6000,
+    "filledSpots": 2800,
+    "prizePool": 180000,
+    "firstPrize": 40000,
+    "type": "mega"
+  },
+  {
+    "id": "c11",
+    "matchId": "m5",
+    "name": "India vs Pak Special",
+    "entryFee": 99,
+    "totalSpots": 50000,
+    "filledSpots": 38921,
+    "prizePool": 4000000,
+    "firstPrize": 1000000,
+    "type": "mega"
+  },
+  {
+    "id": "c12",
+    "matchId": "m5",
+    "name": "Head to Head",
+    "entryFee": 49,
+    "totalSpots": 2,
+    "filledSpots": 1,
+    "prizePool": 90,
+    "firstPrize": 90,
+    "type": "h2h"
+  },
+  {
+    "id": "c13",
+    "matchId": "m5",
+    "name": "Small League",
+    "entryFee": 19,
+    "totalSpots": 10,
+    "filledSpots": 6,
+    "prizePool": 170,
+    "firstPrize": 100,
+    "type": "small"
+  },
+  {
+    "id": "c14",
+    "matchId": "m8",
+    "name": "Mega Contest",
+    "entryFee": 49,
+    "totalSpots": 10000,
+    "filledSpots": 10000,
+    "prizePool": 400000,
+    "firstPrize": 100000,
+    "type": "mega"
+  },
+  {
+    "id": "c15",
+    "matchId": "m9",
+    "name": "Mega Contest",
+    "entryFee": 49,
+    "totalSpots": 10000,
+    "filledSpots": 10000,
+    "prizePool": 400000,
+    "firstPrize": 100000,
+    "type": "mega"
+  }
+]
