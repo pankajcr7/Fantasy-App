@@ -16,7 +16,7 @@ export default function Header({ title, back, showWallet = false, children }) {
             </button>
           )}
           <div className="header-title">
-            {!back && <img src="/logo.png" alt="Local Dream" />}
+            {!back && <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" />}
             {title || 'Local Dream'}
           </div>
         </div>

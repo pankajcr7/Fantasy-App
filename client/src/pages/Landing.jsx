@@ -7,7 +7,7 @@ export default function Landing() {
   return (
     <div className="landing-page">
       <div className="landing-hero">
-        <img src="/logo.png" alt="Local Dream" className="landing-logo" />
+        <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" className="landing-logo" />
         <h1 className="landing-title">
           Play <span className="highlight">Fantasy Cricket</span> & Win Big!
         </h1>

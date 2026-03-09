@@ -28,7 +28,7 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <img src="/logo.png" alt="Local Dream" className="auth-logo" />
+      <img src={import.meta.env.BASE_URL + "logo.png"} alt="Local Dream" className="auth-logo" />
       <h1 className="auth-title">Welcome Back!</h1>
       <p className="auth-subtitle">Login to your Local Dream account</p>
       <form className="auth-form" onSubmit={handleSubmit}>
